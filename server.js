@@ -1,5 +1,6 @@
-import express from "express";
-import { GoogleAuth } from "google-auth-library";
+const express = require("express");
+const fs = require("fs");
+const { GoogleAuth } = require("google-auth-library");
 
 const app = express();
 app.use(express.json());
@@ -7,6 +8,27 @@ app.use(express.json());
 const PROJECT_ID = "moving-detection-in-my-house";
 const SCOPES = ["https://www.googleapis.com/auth/firebase.messaging"];
 
+// ⭐ Save FCM token from Android
+app.post("/register", (req, res) => {
+  try {
+    const token = req.body.token;
+
+    if (!token) {
+      return res.status(400).send("Missing token");
+    }
+
+    console.log("Received new FCM token:", token);
+
+    fs.writeFileSync("token.txt", token);
+
+    res.send("Token updated");
+  } catch (err) {
+    console.error("Error in /register:", err);
+    res.status(500).send("Server error");
+  }
+});
+
+// ⭐ Send FCM notification
 app.post("/send", async (req, res) => {
   try {
     const auth = new GoogleAuth({
