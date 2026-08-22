@@ -4,9 +4,9 @@ import { GoogleAuth } from "google-auth-library";
 
 const app = express();
 
-// ⭐ Prevent JSON parsing on GET requests (fixes Render JSON errors)
+// ⭐ Skip JSON parsing for ALL non-POST requests
 app.use((req, res, next) => {
-  if (req.method === "GET") {
+  if (req.method !== "POST") {
     return next();
   }
   next();
