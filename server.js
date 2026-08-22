@@ -73,4 +73,5 @@ app.post("/send", async (req, res) => {
   }
 });
 
-app.listen(10000, () => console.log("Server running"));
+app.listen(process.env.PORT || 10000, () => console.log("Server running"));
+
