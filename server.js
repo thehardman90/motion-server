@@ -8,7 +8,7 @@ app.use(express.json());
 const PROJECT_ID = "moving-detection-in-my-house";
 const SCOPES = ["https://www.googleapis.com/auth/firebase.messaging"];
 
-// ⭐ Save FCM token from Android
+// Save FCM token
 app.post("/register", (req, res) => {
   try {
     const token = req.body.token;
@@ -28,7 +28,7 @@ app.post("/register", (req, res) => {
   }
 });
 
-// ⭐ Send FCM notification
+// Send notification
 app.post("/send", async (req, res) => {
   try {
     const auth = new GoogleAuth({
