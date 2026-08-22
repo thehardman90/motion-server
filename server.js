@@ -4,21 +4,18 @@ import { GoogleAuth } from "google-auth-library";
 
 const app = express();
 
-// ⭐ Skip JSON parsing for ALL non-POST requests
+// ✅ Only parse JSON when Content-Type is application/json
 app.use((req, res, next) => {
-  if (req.method !== "POST") {
-    return next();
+  if (req.is("application/json")) {
+    return express.json()(req, res, next);
   }
   next();
 });
 
-// ⭐ Safe health check endpoint for Render
+// ✅ Health check endpoint
 app.get("/", (req, res) => {
   res.send("OK");
 });
-
-// ⭐ JSON parser for POST requests
-app.use(express.json());
 
 const PROJECT_ID = "moving-detection-in-my-house";
 const SCOPES = ["https://www.googleapis.com/auth/firebase.messaging"];
