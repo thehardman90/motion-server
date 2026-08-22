@@ -4,24 +4,11 @@ import { GoogleAuth } from "google-auth-library";
 
 const app = express();
 
-// ✅ Only parse JSON when Content-Type is application/json AND body exists
-app.use((req, res, next) => {
-  const contentType = req.headers["content-type"];
+// ❌ Remove global JSON parsing
+// ❌ Remove conditional JSON parsing
+// We will parse JSON ONLY inside the routes that need it.
 
-  // Only parse JSON if:
-  // 1. Content-Type is application/json
-  // 2. Body is not empty
-  if (contentType && contentType.includes("application/json")) {
-    return express.json({
-      strict: true,        // Only allow valid JSON
-      type: "application/json"
-    })(req, res, next);
-  }
-
-  next();
-});
-
-// ✅ Health check endpoint
+// Health check
 app.get("/", (req, res) => {
   res.send("OK");
 });
@@ -30,9 +17,9 @@ const PROJECT_ID = "moving-detection-in-my-house";
 const SCOPES = ["https://www.googleapis.com/auth/firebase.messaging"];
 
 // Save FCM token
-app.post("/register", (req, res) => {
+app.post("/register", express.json(), (req, res) => {
   try {
-    const token = req.body?.token;
+    const token = req.body.token;
 
     if (!token) {
       return res.status(400).send("Missing token");
@@ -50,7 +37,7 @@ app.post("/register", (req, res) => {
 });
 
 // Send notification
-app.post("/send", async (req, res) => {
+app.post("/send", express.json(), async (req, res) => {
   try {
     const auth = new GoogleAuth({
       credentials: JSON.parse(process.env.SERVICE_ACCOUNT),
@@ -68,8 +55,8 @@ app.post("/send", async (req, res) => {
           body: "Your Arduino detected movement!"
         },
         data: {
-          count: req.body?.count?.toString() || "0",
-          timestamp: req.body?.timestamp || ""
+          count: req.body.count?.toString() || "0",
+          timestamp: req.body.timestamp || ""
         }
       }
     };
