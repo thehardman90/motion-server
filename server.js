@@ -1,6 +1,6 @@
-const express = require("express");
-const fs = require("fs");
-const { GoogleAuth } = require("google-auth-library");
+import express from "express";
+import fs from "fs";
+import { GoogleAuth } from "google-auth-library";
 
 const app = express();
 app.use(express.json());
@@ -8,7 +8,7 @@ app.use(express.json());
 const PROJECT_ID = "moving-detection-in-my-house";
 const SCOPES = ["https://www.googleapis.com/auth/firebase.messaging"];
 
-// Save FCM token from Android
+// ⭐ Save FCM token from Android
 app.post("/register", (req, res) => {
   try {
     const token = req.body.token;
@@ -28,7 +28,7 @@ app.post("/register", (req, res) => {
   }
 });
 
-// Send FCM notification
+// ⭐ Send FCM notification
 app.post("/send", async (req, res) => {
   try {
     const auth = new GoogleAuth({
