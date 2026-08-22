@@ -3,6 +3,21 @@ import fs from "fs";
 import { GoogleAuth } from "google-auth-library";
 
 const app = express();
+
+// ⭐ Prevent JSON parsing on GET requests (fixes Render JSON errors)
+app.use((req, res, next) => {
+  if (req.method === "GET") {
+    return next();
+  }
+  next();
+});
+
+// ⭐ Safe health check endpoint for Render
+app.get("/", (req, res) => {
+  res.send("OK");
+});
+
+// ⭐ JSON parser for POST requests
 app.use(express.json());
 
 const PROJECT_ID = "moving-detection-in-my-house";
@@ -74,4 +89,3 @@ app.post("/send", async (req, res) => {
 });
 
 app.listen(process.env.PORT || 10000, () => console.log("Server running"));
-
