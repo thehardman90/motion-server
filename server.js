@@ -4,9 +4,11 @@ import { GoogleAuth } from "google-auth-library";
 
 const app = express();
 
-// ❌ Remove global JSON parsing
-// ❌ Remove conditional JSON parsing
-// We will parse JSON ONLY inside the routes that need it.
+// ⭐ Log every incoming request
+app.use((req, res, next) => {
+  console.log(`${req.method} ${req.url}`);
+  next();
+});
 
 // Health check
 app.get("/", (req, res) => {
