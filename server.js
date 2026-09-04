@@ -4,16 +4,6 @@ import { GoogleAuth } from "google-auth-library";
 
 const app = express();
 
-// ⭐ NON‑CONSUMING RAW BODY LOGGER
-app.use((req, res, next) => {
-  let raw = "";
-  req.on("data", chunk => raw += chunk);
-  req.on("end", () => {
-    console.log("RAW BODY:", raw);
-  });
-  next();
-});
-
 // ⭐ Log every incoming request
 app.use((req, res, next) => {
   console.log(`${req.method} ${req.url}`);
