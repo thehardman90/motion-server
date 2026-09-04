@@ -20,8 +20,8 @@ app.use((req, res, next) => {
   next();
 });
 
-// ⭐ JSON parser (must come AFTER raw logger)
-app.use(express.json());
+// ❗ IMPORTANT: DO NOT USE express.json() HERE
+// Render already parses JSON automatically
 
 // Health check
 app.get("/", (req, res) => {
