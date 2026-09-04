@@ -4,14 +4,14 @@ import { GoogleAuth } from "google-auth-library";
 
 const app = express();
 
-// ⭐ RAW BODY LOGGER — prints the exact payload EMQX sends
+// ⭐ NON‑CONSUMING RAW BODY LOGGER
 app.use((req, res, next) => {
   let raw = "";
   req.on("data", chunk => raw += chunk);
   req.on("end", () => {
     console.log("RAW BODY:", raw);
-    next();
   });
+  next();
 });
 
 // ⭐ Log every incoming request
@@ -20,8 +20,7 @@ app.use((req, res, next) => {
   next();
 });
 
-// ❗ IMPORTANT: DO NOT USE express.json() HERE
-// Render already parses JSON automatically
+// ❗ DO NOT add express.json() — Render already parses JSON automatically
 
 // Health check
 app.get("/", (req, res) => {
