@@ -4,13 +4,14 @@ import { GoogleAuth } from "google-auth-library";
 
 const app = express();
 
+// ⭐ Global JSON parser — REQUIRED for EMQX
+app.use(express.json());
+
 // ⭐ Log every incoming request
 app.use((req, res, next) => {
   console.log(`${req.method} ${req.url}`);
   next();
 });
-
-// ❗ DO NOT add express.json() — Render already parses JSON automatically
 
 // Health check
 app.get("/", (req, res) => {
